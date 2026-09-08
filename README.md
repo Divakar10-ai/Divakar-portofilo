@@ -1,4 +1,4 @@
-# DIVAKAR — Cinematic Portfolio
+# DIVAKAR — Divakar Portfolio
 
 A cinematic personal portfolio created for **Divakar — Artist · Creative · Storyteller**.
 
