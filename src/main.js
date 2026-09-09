@@ -22,6 +22,7 @@ import { initFinale } from './scene6/boot6.js';
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 const MEDIA = 'public/media/';
+const ASSET_VERSION = '20260909-2';
 const MIN_BLACK = 620;          // the darkness must be felt, even on a fast line
 
 const root = document.documentElement;
@@ -55,7 +56,7 @@ async function main() {
 
   let manifest;
   try {
-    manifest = await fetch(`${MEDIA}manifest.json`).then((r) => r.json());
+    manifest = await fetch(`${MEDIA}manifest.json?v=${ASSET_VERSION}`).then((r) => r.json());
   } catch {
     return degrade('media manifest missing');
   }
@@ -78,10 +79,10 @@ async function main() {
     const c = manifest.clips[name];
     return new Clip({
       src: [
-        { url: MEDIA + c.webm, type: 'video/webm' },
-        { url: MEDIA + c.mp4, type: 'video/mp4' },
+        { url: MEDIA + c.webm + `?v=${ASSET_VERSION}`, type: 'video/webm' },
+        { url: MEDIA + c.mp4 + `?v=${ASSET_VERSION}`, type: 'video/mp4' },
       ],
-      poster: MEDIA + c.poster,
+      poster: MEDIA + c.poster + `?v=${ASSET_VERSION}`, 
       w: c.w, h: c.h, track: c.track, loopFade,
     });
   };
@@ -102,13 +103,13 @@ async function main() {
   // the later scenes build while the hero plays, so scrolling into them is
   // instant; each one runs only while it is actually on screen
   initUniverse().then((u) => { app.universe = u; })
-    .catch((e) => console.warn('[gireesh] universe unavailable:', e.message));
+    .catch((e) => console.warn('[divakar] universe unavailable:', e.message));
   initChrono().then((c) => { app.chrono = c; })
-    .catch((e) => console.warn('[gireesh] chrono unavailable:', e.message));
+    .catch((e) => console.warn('[divakar] chrono unavailable:', e.message));
   initGallery().then((g) => { app.gallery = g; })
-    .catch((e) => console.warn('[gireesh] gallery unavailable:', e.message));
+    .catch((e) => console.warn('[divakar] gallery unavailable:', e.message));
   initFinale().then((f) => { app.finale = f; })
-    .catch((e) => console.warn('[gireesh] finale unavailable:', e.message));
+    .catch((e) => console.warn('[divakar] finale unavailable:', e.message));
 
   if (!playing) return awaitGesture();
   begin();
@@ -233,13 +234,13 @@ function frame(now) {
 // --------------------------------------------------------------------------
 
 function degrade(reason) {
-  console.warn('[gireesh] falling back:', reason);
+  console.warn('[divakar] falling back:', reason);
   root.classList.remove('is-booting');
   root.classList.add('is-fallback');
   boot.classList.add('is-done');
   for (const [, name] of CUES) root.classList.add(`is-${name}`);
   document.querySelector('.stage-wrap').insertAdjacentHTML('afterbegin',
-    '<div class="fallback"><p>GIREESH</p>'
+    '<div class="fallback"><p>DIVAKAR</p>'
     + '<small>Welcome to my world</small></div>');
 }
 
